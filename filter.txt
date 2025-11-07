@@ -76,6 +76,9 @@ Travel
 Pizza
 Bakery
 Guest
+Restaurant
+Clothing
+Accessories
 Lodge
 Bee
 Beer
@@ -121,3 +124,8 @@ Retail
 Advice
 Bistro
 Fashion
+shoe
+ambulance
+museum
+photography
+massage
