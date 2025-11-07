@@ -46,7 +46,7 @@ Deploy on Streamlit Cloud
 4. Choose app.py as the main file and click "Deploy".
 
 After deployment, the app will be hosted publicly at:
-   https://your-app-name.streamlit.app
+   https://excel-filtering-company.streamlit.app/
 
 Usage
 -----
@@ -64,4 +64,5 @@ Notes
 
 License
 -------
+
 This project is free to use for personal and educational purposes.
