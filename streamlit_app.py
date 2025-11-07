@@ -116,4 +116,5 @@ else:
     st.info("Upload your Excel file above to begin.")
 
 st.markdown("---")
-st.caption("Built with Streamlit and Python | Supports multilingual filters")
+st.caption("Built with Streamlit and Python | Supports multilingual filters | Created by Rafi Sembiring")
+
