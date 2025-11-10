@@ -42,7 +42,6 @@ for base_word, translations in filter_translations.items():
     expanded_filters.add(base_word.lower())
     expanded_filters.update([t.lower() for t in translations])
 
-# Precompile a single big regex for fast vectorized search
 filter_pattern = (
     r"\b(" + "|".join(re.escape(word) for word in expanded_filters) + r")\b"
     if expanded_filters
@@ -58,77 +57,75 @@ uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx", "xls"])
 # MAIN LOGIC
 # -------------------------------
 if uploaded_file is not None:
-    df = pd.read_excel(uploaded_file, dtype=str)  # treat all as strings
-    df = df.fillna("")  # handle NaN early
+    df = pd.read_excel(uploaded_file, dtype=str).fillna("")
 
     st.write("### Preview of Uploaded Data")
     st.dataframe(df.head())
 
+    # -------------------------------
+    # GENDER DETECTION (for ALL ROWS)
+    # -------------------------------
+    if "first name" in df.columns:
+        st.write("### Detecting Gender for All Rows...")
+        d = gender.Detector(case_sensitive=False)
+
+        first_names = (
+            df["first name"]
+            .astype(str)
+            .str.strip()
+            .str.split()
+            .str[0]
+            .fillna("")
+        )
+
+        unique_firsts = [n for n in first_names.unique() if n and n.isalpha()]
+
+        gender_map = {}
+        for name in unique_firsts:
+            try:
+                gender_map[name] = d.get_gender(name.lower())
+            except Exception:
+                gender_map[name] = "unknown"
+
+        df["gender"] = first_names.map(gender_map).fillna("unknown")
+
+        st.success(f"Gender detected for {len(unique_firsts):,} unique names.")
+        st.dataframe(df[["first name", "gender"]].head(20))
+    else:
+        st.warning("'first name' column not found — gender detection skipped.")
+
+    # -------------------------------
+    # FILTERING (after gender detection)
+    # -------------------------------
     if filter_pattern and "compt" in df.columns:
         st.write("### Active Filter Keywords")
         st.text(", ".join(sorted(expanded_filters)))
 
-        # Vectorized filtering — super fast
         filtered_df = df[df["compt"].str.lower().str.contains(filter_pattern, na=False, regex=True)]
 
         st.success(f"Found {len(filtered_df):,} matching rows.")
-        st.dataframe(filtered_df.head(50))  # preview only
+        st.dataframe(filtered_df.head(50))
+    else:
+        filtered_df = pd.DataFrame()
+        st.warning("No valid filter pattern or 'compt' column missing.")
 
-        # -------------------------------
-        # GENDER DETECTION (optimized & safe)
-        # -------------------------------
-        if "first name" in filtered_df.columns:
-            d = gender.Detector(case_sensitive=False)
-
-            # Clean and extract the first name safely
-            first_names = (
-                filtered_df["first name"]
-                .astype(str)
-                .str.strip()
-                .str.split()
-                .str[0]
-                .fillna("")
-            )
-
-            # Only process valid alphabetic first names
-            unique_firsts = [n for n in first_names.unique() if n and n.isalpha()]
-
-            # Detect gender once per unique name
-            gender_map = {}
-            for name in unique_firsts:
-                try:
-                    gender_map[name] = d.get_gender(name.lower())
-                except Exception:
-                    gender_map[name] = "unknown"
-
-            # Map back to dataframe
-            filtered_df["gender"] = first_names.map(gender_map).fillna("unknown")
-
-            st.write("### Gender Detection Results (sample)")
-            st.dataframe(filtered_df[["first name", "gender"]].head(50))
-        else:
-            st.warning("'first name' column not found — gender detection skipped.")
-
-        # -------------------------------
-        # EXPORT TO EXCEL (same file + new sheet)
-        # -------------------------------
-        output = BytesIO()
-        with pd.ExcelWriter(output, engine="openpyxl") as writer:
-            df.to_excel(writer, sheet_name="Original_Data", index=False)
+    # -------------------------------
+    # EXPORT TO EXCEL (ALL + FILTERED)
+    # -------------------------------
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        df.to_excel(writer, sheet_name="All_Data_With_Gender", index=False)
+        if not filtered_df.empty:
             filtered_df.to_excel(writer, sheet_name="Filtered_Results", index=False)
 
-        st.success("Filtered data added as a new sheet in the Excel file.")
-        st.download_button(
-            label="📥 Download Updated Excel File",
-            data=output.getvalue(),
-            file_name="updated_with_filtered.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+    st.success("Gender added for all rows and filtered results saved.")
+    st.download_button(
+        label="📥 Download Updated Excel File",
+        data=output.getvalue(),
+        file_name="updated_with_gender_and_filtered.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
-    elif "compt" not in df.columns:
-        st.error("'compt' column not found in your Excel file.")
-    else:
-        st.error("No filter words found in filter.txt or translations.")
 else:
     st.info("Upload your Excel file above to begin.")
 
