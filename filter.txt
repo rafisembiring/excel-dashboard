@@ -151,5 +151,8 @@ security
 publishing
 newspaper
 cottage
-
-
+liquido
+gym
+fitness
+martial art
+port
