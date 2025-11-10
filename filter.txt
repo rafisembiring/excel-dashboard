@@ -163,3 +163,11 @@ acquisition
 department
 immobile
 translation
+advisory
+burger
+virtual
+loan
+authority
+system
+intelligent
+resort
