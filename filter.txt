@@ -3,7 +3,6 @@ INSURANCE
 LAW FIRM
 LAWYER
 MUNICIPALITY
-ORGANIZATION
 SCHOOL
 SECURITIES
 SOFTWARE
@@ -153,3 +152,4 @@ security
 publishing
 newspaper
 cottage
+
