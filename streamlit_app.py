@@ -58,8 +58,8 @@ uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx", "xls"])
 # MAIN LOGIC
 # -------------------------------
 if uploaded_file is not None:
-    df = pd.read_excel(uploaded_file, dtype=str)  # read as strings to avoid dtype inference cost
-    df = df.fillna("")  # fill NaN early
+    df = pd.read_excel(uploaded_file, dtype=str)  # treat all as strings
+    df = df.fillna("")  # handle NaN early
 
     st.write("### Preview of Uploaded Data")
     st.dataframe(df.head())
@@ -68,21 +68,41 @@ if uploaded_file is not None:
         st.write("### Active Filter Keywords")
         st.text(", ".join(sorted(expanded_filters)))
 
-        # Vectorized filtering using str.contains (fast C-based)
+        # Vectorized filtering — super fast
         filtered_df = df[df["compt"].str.lower().str.contains(filter_pattern, na=False, regex=True)]
 
         st.success(f"Found {len(filtered_df):,} matching rows.")
-        st.dataframe(filtered_df.head(50))  # limit preview for large files
+        st.dataframe(filtered_df.head(50))  # preview only
 
         # -------------------------------
-        # GENDER DETECTION (optional)
+        # GENDER DETECTION (optimized & safe)
         # -------------------------------
         if "first name" in filtered_df.columns:
             d = gender.Detector(case_sensitive=False)
-            # Apply only to unique first names for speed
-            unique_firsts = filtered_df["first name"].astype(str).str.split().str[0].unique()
-            gender_map = {name: d.get_gender(name) for name in unique_firsts}
-            filtered_df["gender"] = filtered_df["first name"].astype(str).str.split().str[0].map(gender_map)
+
+            # Clean and extract the first name safely
+            first_names = (
+                filtered_df["first name"]
+                .astype(str)
+                .str.strip()
+                .str.split()
+                .str[0]
+                .fillna("")
+            )
+
+            # Only process valid alphabetic first names
+            unique_firsts = [n for n in first_names.unique() if n and n.isalpha()]
+
+            # Detect gender once per unique name
+            gender_map = {}
+            for name in unique_firsts:
+                try:
+                    gender_map[name] = d.get_gender(name.lower())
+                except Exception:
+                    gender_map[name] = "unknown"
+
+            # Map back to dataframe
+            filtered_df["gender"] = first_names.map(gender_map).fillna("unknown")
 
             st.write("### Gender Detection Results (sample)")
             st.dataframe(filtered_df[["first name", "gender"]].head(50))
