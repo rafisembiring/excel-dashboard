@@ -1,6 +1,6 @@
 INSTITUTE
 INSURANCE
-LAW FIRM
+LAW
 LAWYER
 MUNICIPALITY
 SCHOOL
@@ -19,7 +19,7 @@ FEDERAL
 ACCOUNTING
 ACCOUNTANT
 ASSOCIATES
-TAX CONSULTANTS
+TAX
 BANK
 MINISTRY
 TECHNOLOGIES
@@ -43,17 +43,16 @@ Associados
 Investment
 Capital
 Attorney
-Akademie
+Academy
 FUND
 COMMUNICATIONS
 WEBSITE DESIGN
 ATTORNEYS
 COLLEGE
 Finance
-INVESTMENTS
+INVEST
 Department
 Technology
-Chamber of
 Financial
 Municipal
 Salon
@@ -86,7 +85,7 @@ Cake
 Resto
 Digital
 Taxi
-Coffe
+Coffee
 Eat
 Pasta
 Meat
@@ -152,4 +151,5 @@ security
 publishing
 newspaper
 cottage
+
 
