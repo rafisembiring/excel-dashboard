@@ -57,6 +57,9 @@ uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx", "xls"])
 # MAIN LOGIC
 # -------------------------------
 if uploaded_file is not None:
+    # Extract original filename
+    original_filename = os.path.splitext(uploaded_file.name)[0]
+
     df = pd.read_excel(uploaded_file, dtype=str).fillna("")
 
     st.write("### Preview of Uploaded Data")
@@ -101,28 +104,37 @@ if uploaded_file is not None:
         st.write("### Active Filter Keywords")
         st.text(", ".join(sorted(expanded_filters)))
 
+        # Filter rows matching pattern
         filtered_df = df[df["compt"].str.lower().str.contains(filter_pattern, na=False, regex=True)]
 
-        st.success(f"Found {len(filtered_df):,} matching rows.")
+        # Remove filtered rows from main dataframe
+        remaining_df = df[~df.index.isin(filtered_df.index)]
+
+        st.success(f"Found {len(filtered_df):,} matching rows. {len(remaining_df):,} rows remain.")
         st.dataframe(filtered_df.head(50))
     else:
         filtered_df = pd.DataFrame()
+        remaining_df = df
         st.warning("No valid filter pattern or 'compt' column missing.")
 
     # -------------------------------
-    # EXPORT TO EXCEL (ALL + FILTERED)
+    # EXPORT TO EXCEL (REMAINING + FILTERED)
     # -------------------------------
     output = BytesIO()
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
-        df.to_excel(writer, sheet_name="All_Data_With_Gender", index=False)
+        remaining_df.to_excel(writer, sheet_name="All_Data_With_Gender", index=False)
         if not filtered_df.empty:
             filtered_df.to_excel(writer, sheet_name="Filtered_Results", index=False)
 
-    st.success("Gender added for all rows and filtered results saved.")
+    st.success("Filtered companies moved to a separate sheet successfully.")
+
+    # File name with _filtered suffix
+    output_filename = f"{original_filename}_filtered.xlsx"
+
     st.download_button(
-        label="📥 Download Updated Excel File",
+        label="📥 Download Filtered Excel File",
         data=output.getvalue(),
-        file_name="updated_with_gender_and_filtered.xlsx",
+        file_name=output_filename,
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
