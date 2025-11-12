@@ -22,7 +22,6 @@ ASSOCIATES
 TAX
 BANK
 MINISTRY
-TECHNOLOGIES
 LEGAL
 ICT
 ALLIANZ
@@ -52,7 +51,6 @@ COLLEGE
 Finance
 INVEST
 Department
-Technology
 Financial
 Municipal
 Salon
@@ -66,7 +64,6 @@ Web
 Telecomunication
 Real Estate
 Property
-System
 Hotel
 Hostel
 Tour
@@ -114,7 +111,6 @@ Foundation
 Audit
 Union
 Catering
-Net
 Holding
 Registry
 Capital
@@ -168,11 +164,11 @@ burger
 virtual
 loan
 authority
-system
 intelligent
 resort
 service
 post
 rent
 estate
+
 
