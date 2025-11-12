@@ -172,5 +172,8 @@ rent
 estate
 grill
 solution
+apartments
+apartment
+landmark
 
 
