@@ -176,5 +176,6 @@ apartments
 apartment
 landmark
 services
+assurances
 
 
