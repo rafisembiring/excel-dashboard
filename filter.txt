@@ -177,5 +177,7 @@ apartment
 landmark
 services
 assurances
+consulting
+consultant
 
 
