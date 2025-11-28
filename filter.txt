@@ -180,5 +180,8 @@ assurances
 consulting
 consultant
 konsult
+debt
+collector
+debt collector
 
 
