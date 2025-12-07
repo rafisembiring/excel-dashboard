@@ -20,6 +20,7 @@ excel-filter-dashboard/
 │
 ├── app.py
 ├── filter.txt
+├── filter_translation.json
 ├── requirements.txt
 ├── README.txt
 └── .gitignore
@@ -68,4 +69,5 @@ License
 -------
 
 This project is free to use for personal and educational purposes.
+
 
