@@ -15,6 +15,7 @@ Features
 
 File Structure
 --------------
+```
 excel-filter-dashboard/
 │
 ├── app.py
@@ -22,6 +23,7 @@ excel-filter-dashboard/
 ├── requirements.txt
 ├── README.txt
 └── .gitignore
+```
 
 How to Run Locally
 ------------------
@@ -66,3 +68,4 @@ License
 -------
 
 This project is free to use for personal and educational purposes.
+
