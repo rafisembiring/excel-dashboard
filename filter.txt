@@ -183,5 +183,6 @@ konsult
 debt
 collector
 debt collector
+Taxikorsa
 
 
