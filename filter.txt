@@ -186,3 +186,6 @@ debt collector
 Taxikorsa
 Universitie
 museum
+church
+mosque
+pastor
