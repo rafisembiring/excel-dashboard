@@ -84,6 +84,7 @@ Eat
 Pasta
 Meat
 Café
+Kebab
 Credit
 Beverage
 Host
