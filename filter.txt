@@ -174,9 +174,6 @@ apartment
 landmark
 services
 assurances
-consulting
-consultant
-konsult
 debt
 collector
 debt collector
@@ -190,9 +187,6 @@ Net
 .Net
 -Net
 Network
-Consult
 Kaffe
-Asociajia
-Konsult
 News
 Politie
