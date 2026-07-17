@@ -101,9 +101,6 @@ if uploaded_file is not None:
     # FILTERING (after gender detection)
     # -------------------------------
     if filter_pattern and "compt" in df.columns:
-        st.write("### Active Filter Keywords")
-        st.text(", ".join(sorted(expanded_filters)))
-
         # Filter rows matching pattern
         filtered_df = df[df["compt"].str.lower().str.contains(filter_pattern, na=False, regex=True)]
 
