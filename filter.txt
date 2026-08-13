@@ -188,3 +188,6 @@ Network
 Kaffe
 News
 Politie
+Net
+Software
+Informatika
