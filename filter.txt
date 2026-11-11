@@ -192,3 +192,4 @@ Net
 Software
 Informatika
 Cafe
+Rental
